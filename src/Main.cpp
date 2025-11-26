@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Menu.h"
 #include "Matrix.h"
-
+#include "utility/colors.h"
 using namespace std;
 
 void printMatrix(vector<vector<double>>& mat)
@@ -9,7 +9,7 @@ void printMatrix(vector<vector<double>>& mat)
     cout << "\n Result Matrix: \n";
     for (const auto& row : mat)
     {
-        for (int val : row)
+        for (double val : row)
         {
             cout << BOLD_BLUE << val << " " ;
         }
@@ -21,6 +21,7 @@ int main()
 {
     Menu menu;
     menu.Display();
+    
     int op = menu.getOption();
 
     Matrix matrix;
@@ -89,8 +90,15 @@ int main()
         printMatrix(res);
         break;
 	}
+    case 9 :
+    {
+        cout << "LU Factorization Selected.\n";
+        auto res = matrix.LU_Factorization();
+        printMatrix(res);
+        break;
+    }
     default:
-        cout << "Invalid Option.\n";
+        cout << RED <<"Invalid Option.\n"<< RESET ; 
         break;
     }
 

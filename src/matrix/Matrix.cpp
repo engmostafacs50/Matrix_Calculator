@@ -64,7 +64,7 @@ vector<vector<double>> Matrix::scalarMultiplication()
     inputMatrix(matrixA, rowsA, colsA, "Matrix A");
 
     cout << BOLD_YELLOW << "Enter scalar value: " << RESET;
-    int scalar;
+    double scalar;
     cin >> scalar;
 
     vector<vector<double>> result(rowsA, vector<double>(colsA));
@@ -127,6 +127,44 @@ vector<vector<double>> Matrix::transpose()
     return result;
 }
 
+vector<vector<double>> Matrix::LU_Factorization()
+{
+    inputMatrix(matrixA, rowsA, colsA, "Matrix A"); 
+
+    vector<vector<double>> U_Matrix(rowsA , vector<double>(rowsA , 0) );
+    U_Matrix = matrixA ;
+    for (int k = 0; k < rowsA - 1;k++)
+    {
+        for (int i = k+1; i < rowsA; i++)
+        {
+            double factor = U_Matrix[i][k] / U_Matrix[k][k];
+            for (int j = k; j < rowsA;j++)
+            {
+                U_Matrix[i][j] = (U_Matrix[i][j]) + (-1 * factor * U_Matrix[k][j]);
+            }
+        }
+    }
+    return U_Matrix; 
+
+}
+double Matrix::determinant()
+{
+    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
+
+    if (rowsA != colsA)
+    {
+        cout << RED << "Error: Matrix must be square.\n" << RESET;
+        return 0;
+    }
+
+    if (rowsA == 2)
+    {
+        double det = (matrixA[0][0] * matrixA[1][1]) - (matrixA[0][1] * matrixA[1][0]);
+        return det;
+    }
+}
+
+
 vector<vector<double>> Matrix::Matrix_power()
 {
     inputMatrix(matrixA, rowsA, colsA, "Matrix A");
@@ -183,19 +221,3 @@ vector<vector<double>> Matrix::Matrix_power()
     return result;
 }
 
-double Matrix::determinant()
-{
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    if (rowsA != colsA)
-    {
-        cout << RED << "Error: Matrix must be square.\n" << RESET;
-        return 0;
-    }
-
-    if (rowsA == 2)
-    {
-        double det =(matrixA[0][0] * matrixA[1][1]) -(matrixA[0][1] * matrixA[1][0]);
-        return det;
-    }
-}

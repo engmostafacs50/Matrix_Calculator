@@ -1,18 +1,28 @@
-﻿# Build folders (must be ignored)
+﻿# Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.pdb
+*.ilk
+ipch/
+*.ipch
+
+# Build folders
 out/
 build/
+Debug/
+Release/
+x64/
+*.exe
+
+# CMake
 CMakeFiles/
 CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
 
-# Visual Studio
-.vs/
-*.sln
-*.vcxproj*
-*.user
-
-# binaries
-*.exe
-*.dll
-*.obj
-*.pdb
-*.cache
+# Ninja
+*.ninja
+.ninja_log
+.ninja_deps
