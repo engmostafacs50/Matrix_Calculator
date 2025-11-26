@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include "Menu.h"
 #include "utility/colors.h"
 using namespace std;
@@ -13,7 +13,7 @@ void Menu::Display()  {
 	cout << GREEN << "6. Transpose\n" << RESET;
 	cout << GREEN << "7. Determinant\n" << RESET;
 	cout << GREEN << "8. Matrix Power\n" << RESET;
-	cout << GREEN << "9. LU Factrization\n" << RESET; 
+	/*cout << GREEN << "9. LU Factrization\n" << RESET; */
 	cout << RED << "0. Exit\n" << RESET;  
     cout << BOLD_BLUE << "================================================\n" << RESET;
     cout << BOLD_WHITE << "Enter your choice: " << RESET;

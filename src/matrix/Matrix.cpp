@@ -129,9 +129,8 @@ vector<vector<double>> Matrix::transpose()
 
 vector<vector<double>> Matrix::LU_Factorization()
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A"); 
+    vector<vector<double>> U_Matrix = matrixA;
 
-    vector<vector<double>> U_Matrix(rowsA , vector<double>(rowsA , 0) );
     U_Matrix = matrixA ;
     for (int k = 0; k < rowsA - 1;k++)
     {
@@ -145,7 +144,6 @@ vector<vector<double>> Matrix::LU_Factorization()
         }
     }
     return U_Matrix; 
-
 }
 double Matrix::determinant()
 {
@@ -162,6 +160,16 @@ double Matrix::determinant()
         double det = (matrixA[0][0] * matrixA[1][1]) - (matrixA[0][1] * matrixA[1][0]);
         return det;
     }
+
+    vector<vector<double>> U = LU_Factorization();
+
+    double det = 1.0;
+    for (int i = 0; i < rowsA; i++)
+    {
+        det *= U[i][i];
+    }
+
+    return det;
 }
 
 
