@@ -21,6 +21,8 @@ public:
     vector<vector<double>> multiplication();
     vector<vector<double>> transpose();
     /*vector<vector<double>> LU_Factorization();*/ 
+    vector<vector<double>> Matrix_power() ; 
+
      
     double trace();    
     double determinant();

@@ -6,7 +6,9 @@
     ]
   },
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\matrix"
   ],
   "PreviewInSolutionExplorer": false
 }

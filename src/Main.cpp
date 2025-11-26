@@ -11,10 +11,11 @@ void printMatrix(vector<vector<double>>& mat)
     {
         for (int val : row)
         {
-            cout << val << " ";
+            cout << BOLD_BLUE << val << " " ;
         }
         cout << "\n";
     }
+    cout << RESET;
 }
 int main()
 {
@@ -81,7 +82,13 @@ int main()
         cout << "Determinant = " << res << "\n";
         break;
     }
-
+    case 8:
+    {
+        cout << "Matrix Power Selected.\n";
+        auto res = matrix.Matrix_power();
+        printMatrix(res);
+        break;
+	}
     default:
         cout << "Invalid Option.\n";
         break;

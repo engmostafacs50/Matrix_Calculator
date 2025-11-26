@@ -127,6 +127,62 @@ vector<vector<double>> Matrix::transpose()
     return result;
 }
 
+vector<vector<double>> Matrix::Matrix_power()
+{
+    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
+
+    if (rowsA != colsA) {
+        cout << RED << "Error: Matrix must be square." << RESET << endl;
+        return {};
+    }
+
+    cout << BOLD_YELLOW << "Enter power: " << RESET;
+    int power;
+    cin >> power;
+
+    if (power < 0) {
+        cout << RED << "Error: Negative powers not supported." << RESET << endl;
+        return {};
+    }
+
+    int n = rowsA;
+    vector<vector<double>> result(n, vector<double>(n, 0));
+
+  
+    for (int i = 0; i < n; i++) {
+        result[i][i] = 1.0;
+    }
+
+    if (power == 0)
+    {
+        return result;
+    }
+    
+    if (power == 1) 
+    {
+            return matrixA;
+    }
+
+    for (int p = 0; p < power; p++) {
+        vector<vector<double>> temp(n, vector<double>(n, 0));
+
+        for (int i = 0; i < n; i++) 
+        {
+            for (int j = 0; j < n; j++) 
+            {
+                for (int k = 0; k < n; k++)
+                {
+                    temp[i][j] += result[i][k] * matrixA[k][j];
+                }
+            }
+        }
+
+        result = temp;
+    }
+
+    return result;
+}
+
 double Matrix::determinant()
 {
     inputMatrix(matrixA, rowsA, colsA, "Matrix A");
