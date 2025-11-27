@@ -4,103 +4,113 @@
 #include "utility/colors.h"
 using namespace std;
 
-void printMatrix(vector<vector<double>>& mat)
-{
-    cout << "\n Result Matrix: \n";
-    for (const auto& row : mat)
+Matrix inputMatrixFromUser(const string& name) {
+    int r, c;
+    cout << BOLD_YELLOW <<  "Enter rows for Matrix " << name << ": " << RESET;
+    cin >> r;
+    cout << BOLD_YELLOW << "Enter columns for Matrix " << name << ": " << RESET;
+    cin >> c;
+
+    vector<vector<double>> nums(r, vector<double>(c));
+
+    cout << GREEN << "Enter elements for Matrix " << name << ":\n" << BLUE ;
+
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+        {
+            cin >> nums[i][j];
+        }
+    }
+    cout << RESET << endl; 
+
+    return Matrix(nums);
+}
+
+
+void printMatrix(const vector<vector<double>>& mat) {
+    cout << BOLD_BLUE << "\nResult Matrix:\n" << RESET;
+    for (const auto& row : mat) 
     {
         for (double val : row)
         {
-            cout << BOLD_BLUE << val << " " ;
+            cout << BOLD_BLUE << val << " " << RESET;
         }
+
         cout << "\n";
     }
+
     cout << RESET;
 }
-int main()
-{
+
+
+int main() {
     Menu menu;
     menu.Display();
-    
     int op = menu.getOption();
 
-    Matrix matrix;
+    Matrix A, B;
+    bool needSecond = (op == 1 || op == 2 || op == 4);
+    A = inputMatrixFromUser("Matrix A");
+    if (needSecond)
+        B = inputMatrixFromUser("MAtrix B");
 
-    switch (op)
-    {
-    case 1:
-    {
-        cout << "Matrix Addition Selected.\n";
-        auto res = matrix.addition();
-        printMatrix(res);
-        break;
-    }
+    try {
+        switch (op) {
 
-    case 2:
-    {
-        cout << "Matrix Subtraction Selected.\n";
-        auto res = matrix.subtraction();
-        printMatrix(res);
-        break;
-    }
+        case 1:
+            printMatrix(A.addition(B).getMAtrix());
+            break;
 
-    case 3:
-    {
-        cout << "Scalar Multiplication Selected.\n";
-        auto res = matrix.scalarMultiplication();
-        printMatrix(res);
-        break;
-    }
+        case 2:
+            printMatrix(A.subtraction(B).getMAtrix());
+            break;
 
-    case 4:
-    {
-        cout << "Matrix Multiplication Selected.\n";
-        auto res = matrix.multiplication();
-        printMatrix(res);
-        break;
-    }
+        case 3: {
+            double scalar;
+            cout << "Enter scalar: ";
+            cin >> scalar;
+            printMatrix(A.scalarMultiplication(scalar).getMAtrix());
+            break;
+        }
 
-    case 5:
-    {
-        cout << "Trace Selected.\n";
-        auto res = matrix.trace();
-        cout << "Trace = " << res << "\n";
-        break;
-    }
+        case 4:
+            printMatrix(A.multiplication(B).getMAtrix());
+            break;
 
-    case 6:
-    {
-        cout << "Transpose Selected.\n";
-        auto res = matrix.transpose();
-        printMatrix(res);
-        break;
-    }
+        case 5:
+            cout << "Trace = " << A.trace() << "\n";
+            break;
 
-    case 7:
-    {
-        cout << "Determinant Selected.\n";
-        auto res = matrix.determinant();
-        cout << "Determinant = " << res << "\n";
-        break;
+        case 6:
+            printMatrix(A.transpose().getMAtrix());
+            break;
+
+        case 7:
+            cout << "Determinant = " << A.determinant() << "\n";
+            break;
+
+        case 8: {
+            int p;
+            cout << "Enter power: ";
+            cin >> p;
+            printMatrix(A.Matrix_power(p).getMAtrix());
+            break;
+        }
+
+        case 9:
+            printMatrix(A.LU_Factorization().getMAtrix());
+            break;
+
+        default:
+            cout << "Invalid Option\n";
+        }
+
     }
-    case 8:
-    {
-        cout << "Matrix Power Selected.\n";
-        auto res = matrix.Matrix_power();
-        printMatrix(res);
-        break;
-	}
-    case 9 :
-    {
-        cout << "LU Factorization Selected.\n";
-        auto res = matrix.LU_Factorization();
-        printMatrix(res);
-        break;
-    }
-    default:
-        cout << RED <<"Invalid Option.\n"<< RESET ; 
-        break;
+    catch (const exception& e) {
+        cout << "Error: " << e.what() << "\n";
     }
 
     return 0;
 }
+
