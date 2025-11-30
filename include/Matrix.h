@@ -4,26 +4,45 @@
 #include <vector>
 #include <string>
 #include "utility/Colors.h"
+#include<utility>
 using namespace std;
 class Matrix
 {
 private:
-    vector<vector<double>> matrixA;
-    vector<vector<double>> matrixB;
-    int rowsA = 0, colsA = 0;
-    int rowsB = 0, colsB = 0;
-    void inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name);
+    vector<vector<double>> matrix;
+    //vector<vector<double>> matrixB;
+    int rows = 0, cols = 0;
+    //void inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name);
 
 public:
-    vector<vector<double>> addition();
-    vector<vector<double>> subtraction();
-    vector<vector<double>> scalarMultiplication();
-    vector<vector<double>> multiplication();
-    vector<vector<double>> transpose();
-    vector<vector<double>> LU_Factorization(); 
-    vector<vector<double>> Matrix_power() ; 
 
+    Matrix(int r, int c);
+    Matrix(const vector<vector<double>>& d);
+    Matrix() : rows(0), cols(0), matrix{} 
+    {
+    }
+
+
+    const vector<vector<double>>& getMAtrix() const;
+    int getRows() const;
+    int getCols() const;
+
+
+    Matrix addition(Matrix &matrix2) ;
+    Matrix subtraction(Matrix& matrix2) ;
+    Matrix scalarMultiplication(double scalar) ;
+    Matrix multiplication(Matrix& matrix2)  ;
+    Matrix transpose()  ;
+    //Matrix U_Matrix()  ;
+    //Matrix V_Matrix();
+
+    Matrix Matrix_power(int power) ;
+
+
+    pair<Matrix, Matrix> LU();
      
-    double trace();    
-    double determinant();
+    double trace()  const;    
+    double determinant() ;
+
+   
 };

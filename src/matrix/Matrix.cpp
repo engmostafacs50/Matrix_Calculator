@@ -1,231 +1,258 @@
 #include "Matrix.h"
+#include <stdexcept>
+//void Matrix::inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name)
+//{
+//    cout << BOLD_YELLOW << "Enter number of rows for " << name << ": " << RESET;
+//    cin >> rows;
+//
+//    cout << BOLD_YELLOW << "Enter number of columns for " << name << ": " << RESET;
+//    cin >> cols;
+//
+//    matrix.assign(rows, vector<double>(cols));
+//
+//    cout << BOLD_YELLOW << "Enter elements of " << name << ":\n" << RESET;
+//
+//    for (int i = 0; i < rows; ++i)
+//        for (int j = 0; j < cols; ++j)
+//            std::cin >> matrix[i][j];
+//}
 
-void Matrix::inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name)
+// ========================================================
+Matrix::Matrix(int r, int c) : rows(r), cols(c) {
+    matrix.assign(r, vector<double>(c, 0));
+}
+
+
+Matrix::Matrix(const vector<vector<double>>& mat) {
+    matrix = mat;
+    rows = mat.size();                              // important for input from user 
+    cols = mat[0].size();    
+}
+
+// ========================================================
+const vector<vector<double>>& Matrix::getMAtrix() const
 {
-    cout << BOLD_YELLOW << "Enter number of rows for " << name << ": " << RESET;
-    cin >> rows;
+    return matrix;
+}
 
-    cout << BOLD_YELLOW << "Enter number of columns for " << name << ": " << RESET;
-    cin >> cols;
+// ========================================================
+int Matrix::getRows() const
+{
+    return rows;
+}
+// ========================================================
+int Matrix::getCols() const
+{
+    return cols;
+}
 
-    matrix.assign(rows, vector<double>(cols));
+// ========================================================
 
-    cout << BOLD_YELLOW << "Enter elements of " << name << ":\n" << RESET;
+Matrix Matrix::scalarMultiplication(double scalar) 
+{
+    Matrix res(rows , cols); 
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            res.matrix[i][j] = matrix[i][j] * scalar;
+        }
+    }
+    return res;
+}
 
+// ========================================================
+
+Matrix Matrix::multiplication(Matrix& matrix2) 
+{
+    if (cols != matrix2.getRows())
+    {
+        throw runtime_error("Matrix 1 row's must be equal matrix 2 colum's");
+    }
+    Matrix res(rows, matrix2.getCols()); // rows * cols  r2 * c2 --> rows * c2
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < matrix2.getCols(); j++)
+        {
+            for (int k = 0; k < matrix2.getRows();k++)
+            {
+                res.matrix[i][j] += matrix[i][k] * matrix2.matrix[k][j];
+            }
+        }
+    }
+
+    return res; 
+}
+
+// ========================================================
+
+Matrix Matrix::transpose() 
+{
+    Matrix result(cols, rows); 
     for (int i = 0; i < rows; ++i)
         for (int j = 0; j < cols; ++j)
-            std::cin >> matrix[i][j];
+            result.matrix[j][i] = matrix[i][j];
+
+    return result;
 }
 
-vector<vector<double>> Matrix::addition()
+// ========================================================
+
+//Matrix Matrix::U_Matrix()
+
+
+
+pair<Matrix, Matrix> Matrix::LU()
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-    inputMatrix(matrixB, rowsB, colsB, "Matrix B");
-
-    if (rowsA != rowsB || colsA != colsB)
+    if (rows != cols)
     {
-        cout << RED << "Error: Dimensions must be equal.\n" << RESET;
-        return {};
+        throw runtime_error("LU Factorization requires a square matrix.");
     }
-
-    vector<vector<double>> result(rowsA, vector<double>(colsA));
-
-    for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsA; ++j)
+    Matrix l_Matrix(rows, cols);
+    Matrix u_Matrix = *this;
+    for (int i = 0; i < rows; i++)
+    {
+        l_Matrix.matrix[i][i] = 1;
+    }
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = i + 1; j < cols; j++)
         {
-            result[i][j] = matrixA[i][j] + matrixB[i][j];
+            l_Matrix.matrix[i][j] = 0;
         }
-
-    return result;
-}
-
-vector<vector<double>> Matrix::subtraction()
-{
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-    inputMatrix(matrixB, rowsB, colsB, "Matrix B");
-
-    if (rowsA != rowsB || colsA != colsB)
+    }
+    for (int k = 0; k < rows - 1; k++)
     {
-        cout << RED << "Error: Dimensions must br equal.\n" << RESET;
-        return {};
+        if (u_Matrix.matrix[k][k] == 0)
+            throw runtime_error("Zero pivot encountered. Pivoting required.");
+
+        for (int i = k + 1; i < rows; i++)
+        {
+            double factor = u_Matrix.matrix[i][k] / u_Matrix.matrix[k][k];
+            l_Matrix.matrix[i][k] = factor;
+
+            for (int j = k; j < rows; j++)
+            {
+                u_Matrix.matrix[i][j] -= factor * u_Matrix.matrix[k][j];
+            }
+        }
     }
 
-    vector<vector<double>> result(rowsA,vector<double>(colsA));
+    return { l_Matrix,  u_Matrix };
 
-    for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsA; ++j)
-            result[i][j] = matrixA[i][j] - matrixB[i][j];
-
-    return result;
 }
+// ========================================================
 
-vector<vector<double>> Matrix::scalarMultiplication()
+ 
+Matrix Matrix::Matrix_power(int power)  
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    cout << BOLD_YELLOW << "Enter scalar value: " << RESET;
-    double scalar;
-    cin >> scalar;
-
-    vector<vector<double>> result(rowsA, vector<double>(colsA));
-
-    for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsA; ++j)
-            result[i][j] = matrixA[i][j] * scalar;
-
-    return result;
-}
-
-vector<vector<double>> Matrix::multiplication()
-{
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-    inputMatrix(matrixB, rowsB, colsB, "Matrix B");
-
-    if (colsA != rowsB)
+    if (rows != cols)
     {
-        std::cout << RED << "Error: Columns of A must equal rows of B.\n" << RESET;
-        return {};
+       throw runtime_error("Matrix must be square for power operation.");
+    }
+    if (power < 0)
+    {
+        throw runtime_error("Negative powers not supported.");
     }
 
-    vector<vector<double>> result(rowsA, vector<double>(colsB, 0));
+    Matrix result(rows, cols);
+    
+    if (power == 0)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            result.matrix[i][i] = 1;
+        }
+        return result;
+    } 
+    if (power == 1)
+    {
+        return *this;
+    }
 
-    for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsB; ++j)
-            for (int k = 0; k < colsA; ++k)
-                result[i][j] += matrixA[i][k] * matrixB[k][j];
+    Matrix base = *this;
+    for (int i = 0; i < power; i++)
+    {
+        result = result.multiplication(base);
+    }
 
     return result;
 }
 
-double Matrix::trace()
+
+// ========================================================
+
+
+
+double Matrix::trace() const
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    if (rowsA != colsA)
+    if (rows != cols)
+        throw runtime_error( "Matrix must be square for trace.");
+    double sum = 0;
+    for (int i = 0; i < rows; i++)
     {
-        std::cout << RED << "Error: Matrix must be square.\n" << RESET;
-        return 0;
+        sum += matrix[i][i];
     }
-
-    long long sum = 0;
-    for (int i = 0; i < rowsA; ++i)
-        sum += matrixA[i][i];
-
     return sum;
 }
 
-vector<vector<double>> Matrix::transpose()
+//=============================================================
+
+double Matrix::determinant() 
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    vector<vector<double>> result(colsA, vector<double>(rowsA));
-
-    for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsA; ++j)
-            result[j][i] = matrixA[i][j];
-
-    return result;
-}
-
-vector<vector<double>> Matrix::LU_Factorization()
-{
-    vector<vector<double>> U_Matrix = matrixA;
-
-    U_Matrix = matrixA ;
-    for (int k = 0; k < rowsA - 1;k++)
+    if (rows != cols)
     {
-        for (int i = k+1; i < rowsA; i++)
-        {
-            double factor = U_Matrix[i][k] / U_Matrix[k][k];
-            for (int j = k; j < rowsA;j++)
-            {
-                U_Matrix[i][j] = (U_Matrix[i][j]) + (-1 * factor * U_Matrix[k][j]);
-            }
-        }
+        throw runtime_error("Matrix must be square for determinant.");
     }
-    return U_Matrix; 
-}
-double Matrix::determinant()
-{
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    if (rowsA != colsA)
+    if (rows == 2)
     {
-        cout << RED << "Error: Matrix must be square.\n" << RESET;
-        return 0;
+        return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
     }
 
-    if (rowsA == 2)
+    auto [L, U] = this->LU();
+    double det = 1;
+    for (int i = 0; i < rows; i++)
     {
-        double det = (matrixA[0][0] * matrixA[1][1]) - (matrixA[0][1] * matrixA[1][0]);
-        return det;
+        det *= U.matrix[i][i];
     }
-
-    vector<vector<double>> U = LU_Factorization();
-
-    double det = 1.0;
-    for (int i = 0; i < rowsA; i++)
-    {
-        det *= U[i][i];
-    }
-
     return det;
 }
 
+//=======================================================================
 
-vector<vector<double>> Matrix::Matrix_power()
+Matrix Matrix::addition(Matrix& matrix2) 
 {
-    inputMatrix(matrixA, rowsA, colsA, "Matrix A");
-
-    if (rowsA != colsA) {
-        cout << RED << "Error: Matrix must be square." << RESET << endl;
-        return {};
-    }
-
-    cout << BOLD_YELLOW << "Enter power: " << RESET;
-    int power;
-    cin >> power;
-
-    if (power < 0) {
-        cout << RED << "Error: Negative powers not supported." << RESET << endl;
-        return {};
-    }
-
-    int n = rowsA;
-    vector<vector<double>> result(n, vector<double>(n, 0));
-
-  
-    for (int i = 0; i < n; i++) {
-        result[i][i] = 1.0;
-    }
-
-    if (power == 0)
+    Matrix res(rows , cols); 
+    if (rows != matrix2.getRows() || cols != matrix2.getCols())
     {
-        return result;
+        throw runtime_error("Matrices munst be same dimensions.");
     }
-    
-    if (power == 1) 
+    for (int i = 0; i < rows; i++)
     {
-            return matrixA;
-    }
-
-    for (int p = 0; p < power; p++) {
-        vector<vector<double>> temp(n, vector<double>(n, 0));
-
-        for (int i = 0; i < n; i++) 
+        for (int j = 0; j < cols; j++)
         {
-            for (int j = 0; j < n; j++) 
-            {
-                for (int k = 0; k < n; k++)
-                {
-                    temp[i][j] += result[i][k] * matrixA[k][j];
-                }
-            }
+           res.matrix[i][j] = matrix[i][j] + matrix2.matrix[i][j];
         }
-
-        result = temp;
     }
-
-    return result;
+    return res; 
 }
 
+// ================================================================
+
+Matrix Matrix::subtraction(Matrix& matrix2)
+{
+    Matrix res(rows, cols);
+    if (rows != matrix2.getRows() || cols != matrix2.getCols())
+    {
+        throw runtime_error ("Matrices munst be same dimensions.") ;
+    }
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            res.matrix[i][j] = matrix[i][j] - matrix2.matrix[i][j];
+        }
+    }
+    return res;
+}
