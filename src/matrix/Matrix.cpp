@@ -67,9 +67,9 @@ Matrix Matrix::multiplication(Matrix& matrix2)
 {
     if (cols != matrix2.getRows())
     {
-        cout << "Matrix 1 row's must be equal matrix 2 colum's";
+        throw runtime_error("Matrix 1 row's must be equal matrix 2 colum's");
     }
-    Matrix res(rows, matrix2.getRows());
+    Matrix res(rows, matrix2.getCols()); // rows * cols  r2 * c2 --> rows * c2
 
     for (int i = 0; i < rows; i++)
     {
@@ -89,7 +89,7 @@ Matrix Matrix::multiplication(Matrix& matrix2)
 
 Matrix Matrix::transpose() 
 {
-    Matrix result(rows, cols); 
+    Matrix result(cols, rows); 
     for (int i = 0; i < rows; ++i)
         for (int j = 0; j < cols; ++j)
             result.matrix[j][i] = matrix[i][j];
@@ -99,23 +99,49 @@ Matrix Matrix::transpose()
 
 // ========================================================
 
-Matrix Matrix::LU_Factorization() 
+//Matrix Matrix::U_Matrix()
+
+
+
+pair<Matrix, Matrix> Matrix::LU()
 {
-    Matrix U_Matrix = *this;
-    for (int k = 0; k < rows - 1;k++)
+    if (rows != cols)
     {
+        throw runtime_error("LU Factorization requires a square matrix.");
+    }
+    Matrix l_Matrix(rows, cols);
+    Matrix u_Matrix = *this;
+    for (int i = 0; i < rows; i++)
+    {
+        l_Matrix.matrix[i][i] = 1;
+    }
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = i + 1; j < cols; j++)
+        {
+            l_Matrix.matrix[i][j] = 0;
+        }
+    }
+    for (int k = 0; k < rows - 1; k++)
+    {
+        if (u_Matrix.matrix[k][k] == 0)
+            throw runtime_error("Zero pivot encountered. Pivoting required.");
+
         for (int i = k + 1; i < rows; i++)
         {
-            double factor = U_Matrix.matrix[i][k] / U_Matrix.matrix[k][k];
-            for (int j = k; j < rows;j++)
+            double factor = u_Matrix.matrix[i][k] / u_Matrix.matrix[k][k];
+            l_Matrix.matrix[i][k] = factor;
+
+            for (int j = k; j < rows; j++)
             {
-                U_Matrix.matrix[i][j] = (U_Matrix.matrix[i][j]) - (factor * U_Matrix.matrix[k][j]);
+                u_Matrix.matrix[i][j] -= factor * u_Matrix.matrix[k][j];
             }
         }
     }
-    return U_Matrix;
-}
 
+    return { l_Matrix,  u_Matrix };
+
+}
 // ========================================================
 
  
@@ -123,11 +149,11 @@ Matrix Matrix::Matrix_power(int power)
 {
     if (rows != cols)
     {
-        cout << RED << "Matrix must be square for power operation." << RESET;    
+       throw runtime_error("Matrix must be square for power operation.");
     }
     if (power < 0)
     {
-        cout << RED << "Negative powers not supported." << RESET; 
+        throw runtime_error("Negative powers not supported.");
     }
 
     Matrix result(rows, cols);
@@ -158,10 +184,11 @@ Matrix Matrix::Matrix_power(int power)
 // ========================================================
 
 
+
 double Matrix::trace() const
 {
     if (rows != cols)
-        cout << RED << "Matrix must be square for trace." << RESET; 
+        throw runtime_error( "Matrix must be square for trace.");
     double sum = 0;
     for (int i = 0; i < rows; i++)
     {
@@ -176,14 +203,14 @@ double Matrix::determinant()
 {
     if (rows != cols)
     {
-        cout << RED << "Matrix must be square for determinant." << RESET;
+        throw runtime_error("Matrix must be square for determinant.");
     }
     if (rows == 2)
     {
         return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
     }
 
-    Matrix U = this->LU_Factorization();
+    auto [L, U] = this->LU();
     double det = 1;
     for (int i = 0; i < rows; i++)
     {
@@ -199,7 +226,7 @@ Matrix Matrix::addition(Matrix& matrix2)
     Matrix res(rows , cols); 
     if (rows != matrix2.getRows() || cols != matrix2.getCols())
     {
-        cout << RED << "Matrices munst be same dimensions." << RESET;
+        throw runtime_error("Matrices munst be same dimensions.");
     }
     for (int i = 0; i < rows; i++)
     {
@@ -218,7 +245,7 @@ Matrix Matrix::subtraction(Matrix& matrix2)
     Matrix res(rows, cols);
     if (rows != matrix2.getRows() || cols != matrix2.getCols())
     {
-        cout << RED << "Matrices munst be same dimensions." << RESET;
+        throw runtime_error ("Matrices munst be same dimensions.") ;
     }
     for (int i = 0; i < rows; i++)
     {
