@@ -1,21 +1,5 @@
 #include "Matrix.h"
 #include <stdexcept>
-//void Matrix::inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name)
-//{
-//    cout << BOLD_YELLOW << "Enter number of rows for " << name << ": " << RESET;
-//    cin >> rows;
-//
-//    cout << BOLD_YELLOW << "Enter number of columns for " << name << ": " << RESET;
-//    cin >> cols;
-//
-//    matrix.assign(rows, vector<double>(cols));
-//
-//    cout << BOLD_YELLOW << "Enter elements of " << name << ":\n" << RESET;
-//
-//    for (int i = 0; i < rows; ++i)
-//        for (int j = 0; j < cols; ++j)
-//            std::cin >> matrix[i][j];
-//}
 
 // ========================================================
 Matrix::Matrix(int r, int c) : rows(r), cols(c) {
@@ -99,8 +83,31 @@ Matrix Matrix::transpose()
 
 // ========================================================
 
-//Matrix Matrix::U_Matrix()
 
+void Matrix::swapRows(Matrix& maTrix, int r1, int r2)
+{
+    swap(maTrix.matrix[r1], maTrix.matrix[r2]);
+}
+//===========================================================================
+bool Matrix::checkPivot(Matrix& maTrix, int k)
+{
+    return maTrix.matrix[k][k] == 0 ; 
+}
+//======================================================================
+int Matrix::findBestPivot(const Matrix& maTrix, int k)
+{
+    int bestRows = k;
+    double bestPivot = abs(maTrix.matrix[k][k]);
+    for (int i = k + 1; i < maTrix.getRows(); i++)
+    {
+        if (abs(maTrix.matrix[i][k]) > bestPivot)
+        {
+            bestRows = i;
+            bestPivot = abs(maTrix.matrix[i][k]);
+        }
+    }
+    return bestRows;
+}
 
 
 pair<Matrix, Matrix> Matrix::LU()
@@ -124,9 +131,20 @@ pair<Matrix, Matrix> Matrix::LU()
     }
     for (int k = 0; k < rows - 1; k++)
     {
+        if (checkPivot(u_Matrix , k))
+        {
+            int bestRow = findBestPivot(u_Matrix, k);
+            if (bestRow != k)
+            {
+                swapRows(u_Matrix, k, bestRow);
+                for (int j = 0; j < k; j++)
+                    swap(l_Matrix.matrix[k][j],l_Matrix.matrix[bestRow][j]);
+            }
+        }
         if (u_Matrix.matrix[k][k] == 0)
-            throw runtime_error("Zero pivot encountered. Pivoting required.");
-
+        {
+            throw runtime_error("Pivot remains zero after pivoting. Matrix is singular.");
+        }
         for (int i = k + 1; i < rows; i++)
         {
             double factor = u_Matrix.matrix[i][k] / u_Matrix.matrix[k][k];
@@ -218,6 +236,7 @@ double Matrix::determinant()
     }
     return det;
 }
+//=====================================================================
 
 //=======================================================================
 
