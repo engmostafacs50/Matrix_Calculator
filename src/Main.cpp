@@ -125,6 +125,11 @@ int main()
                 printMatrix(A.REF().getMAtrix());
                 break; 
             }
+            case 11 :
+            {
+                cout << "Rank = " << A.Rank(); 
+                break; 
+            }
             default:
                 cout << RED << "Invalid Option\n" << RESET;
             }

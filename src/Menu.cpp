@@ -18,7 +18,8 @@ void Menu::Display()  {
 	cout << GREEN << "7. Determinant\n" << RESET;
 	cout << GREEN << "8. Matrix Power\n" << RESET;
 	cout << GREEN << "9. LU Factrization\n" << RESET; 
-	cout << GREEN << "10 . REF\n" << RESET; 
+	cout << GREEN << "10. REF\n" << RESET; 
+	cout << GREEN << "11. Rank of matrix\n" << RESET;
 	cout << RED << "0. Exit\n" << RESET;  
     cout << BOLD_BLUE << "================================================\n" << RESET;
     cout << BOLD_WHITE << "Enter your choice: " << RESET;

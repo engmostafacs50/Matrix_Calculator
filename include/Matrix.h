@@ -42,7 +42,7 @@ public:
      
     double trace()  const;    
     double determinant() ;
-
+    int Rank(); 
     void swapRows(Matrix& maTrix, int r1, int r2);
     bool checkPivot(Matrix& maTrix, int k);
     int findBestPivot(const Matrix& maTrix, int k);

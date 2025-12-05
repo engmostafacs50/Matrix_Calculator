@@ -5,8 +5,7 @@
 Matrix::Matrix(int r, int c) : rows(r), cols(c) {
     matrix.assign(r, vector<double>(c, 0));
 }
-
-
+//========================================================
 Matrix::Matrix(const vector<vector<double>>& mat) {
     matrix = mat;
     rows = mat.size();                              // important for input from user 
@@ -109,6 +108,7 @@ int Matrix::findBestPivot(const Matrix& maTrix, int k)
     }
     return bestRows;
 }
+//=====================================================
 void Matrix::MoveZeroRow(Matrix& mat)
 {
     int currentRow = 0;
@@ -133,6 +133,7 @@ void Matrix::MoveZeroRow(Matrix& mat)
     }
     mat.matrix = newMatrix;
 }
+//========================================================
 Matrix Matrix::REF()
 {
     Matrix mat = *this;
@@ -170,6 +171,7 @@ Matrix Matrix::REF()
     MoveZeroRow(mat); 
     return mat;
 }
+//=====================================================================
 pair<Matrix, Matrix> Matrix::LU()
 {
     if (rows != cols)
@@ -225,9 +227,6 @@ pair<Matrix, Matrix> Matrix::LU()
 }
 // ========================================================
 
-
-
-// ==============================================================
 Matrix Matrix::Matrix_power(int power)  
 {
     if (rows != cols)
@@ -263,12 +262,7 @@ Matrix Matrix::Matrix_power(int power)
     return result;
 }
 
-
-
-
 // ========================================================
-
-
 
 double Matrix::trace() const
 {
@@ -303,10 +297,30 @@ double Matrix::determinant()
     }
     return det;
 }
+// =============================================
+int Matrix::Rank()
+{
+    Matrix mat = this->REF(); 
+    bool CheckZeroRow = false; 
+    int Rank = 0;
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if (mat.matrix[i][j] == 0)
+            {
+                CheckZeroRow = true;
+            }
+            else {
+                CheckZeroRow = false; 
+            }
+        }
+        if (!CheckZeroRow)
+            Rank++;
+    }
+    return Rank; 
+}
 //=====================================================================
-
-//=======================================================================
-
 Matrix Matrix::addition(Matrix& matrix2) 
 {
     Matrix res(rows , cols); 
