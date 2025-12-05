@@ -36,7 +36,7 @@ public:
     Matrix multiplication(Matrix& matrix2)  ;
     Matrix transpose()  ;
     Matrix Matrix_power(int power) ;
-
+    Matrix REF(); 
 
     pair<Matrix, Matrix> LU();
      
@@ -46,5 +46,8 @@ public:
     void swapRows(Matrix& maTrix, int r1, int r2);
     bool checkPivot(Matrix& maTrix, int k);
     int findBestPivot(const Matrix& maTrix, int k);
+
+    void MoveZeroRow(Matrix& mat);
+
    
 };

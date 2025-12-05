@@ -2,6 +2,9 @@
 #include "Menu.h"
 #include "Matrix.h"
 #include "utility/colors.h"
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 using namespace std;
 
 Matrix inputMatrixFromUser(const string& name) {
@@ -48,6 +51,8 @@ int main()
 {
     while (true)   // LOOP start
     {
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
         Menu menu;
         menu.Display();
         int op = menu.getOption();
@@ -65,7 +70,8 @@ int main()
             B = inputMatrixFromUser("B");
 
         try {
-            switch (op) {
+            switch (op) 
+            {
 
             case 1:
                 printMatrix(A.addition(B).getMAtrix());
@@ -115,7 +121,10 @@ int main()
                 printMatrix(U.getMAtrix());
                 break;
             }
-
+            case 10: {
+                printMatrix(A.REF().getMAtrix());
+                break; 
+            }
             default:
                 cout << RED << "Invalid Option\n" << RESET;
             }

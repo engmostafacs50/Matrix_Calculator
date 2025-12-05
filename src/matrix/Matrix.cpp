@@ -1,4 +1,4 @@
-#include "Matrix.h"
+﻿#include "Matrix.h"
 #include <stdexcept>
 
 // ========================================================
@@ -91,7 +91,8 @@ void Matrix::swapRows(Matrix& maTrix, int r1, int r2)
 //===========================================================================
 bool Matrix::checkPivot(Matrix& maTrix, int k)
 {
-    return maTrix.matrix[k][k] == 0 ; 
+   return fabs(maTrix.matrix[k][k]) < 1e-12;
+ 
 }
 //======================================================================
 int Matrix::findBestPivot(const Matrix& maTrix, int k)
@@ -108,8 +109,67 @@ int Matrix::findBestPivot(const Matrix& maTrix, int k)
     }
     return bestRows;
 }
+void Matrix::MoveZeroRow(Matrix& mat)
+{
+    int currentRow = 0;
+    vector<vector<double>> newMatrix(rows, vector<double>(cols, 0));
+    for (int i = 0; i < rows; i++)
+    {
+        bool ZeroRow = true;
+        for (int j = 0; j < cols; j++)
+        {
+            if (fabs(mat.matrix[i][j]) > 1e-12)
+            {
+               ZeroRow = false;
+                break;
+            }
+        }
 
+        if (!ZeroRow)
+        {
+            newMatrix[currentRow] = mat.matrix[i];
+            currentRow++;
+        }
+    }
+    mat.matrix = newMatrix;
+}
+Matrix Matrix::REF()
+{
+    Matrix mat = *this;
+    int currentRow = 0;
+    for (int k = 0; k < cols && currentRow < rows; k++)
+    {
+        if (checkPivot(mat, currentRow))
+        {
+            int bestRow = findBestPivot(mat, currentRow);
+            if (bestRow != currentRow)
+            {
+                swapRows(mat, currentRow, bestRow);
+            }
+        }
 
+        if (fabs(mat.matrix[currentRow][k]) < 1e-12)
+            continue;
+
+        double pivot = mat.matrix[currentRow][k];
+        for (int j = k; j < cols; j++)
+        {
+            mat.matrix[currentRow][j] /= pivot;
+        }
+
+        for (int i = currentRow+ 1; i < rows; i++)
+        {
+            double factor = mat.matrix[i][k] / mat.matrix[currentRow][k];
+            for (int j = k; j < cols; j++)
+            {
+                mat.matrix[i][j] -= factor * mat.matrix[currentRow][j];
+            }
+        }
+        currentRow++;
+    }
+    MoveZeroRow(mat); 
+    return mat;
+}
 pair<Matrix, Matrix> Matrix::LU()
 {
     if (rows != cols)
@@ -118,17 +178,19 @@ pair<Matrix, Matrix> Matrix::LU()
     }
     Matrix l_Matrix(rows, cols);
     Matrix u_Matrix = *this;
+
+    //===========================================
     for (int i = 0; i < rows; i++)
     {
-        l_Matrix.matrix[i][i] = 1;
-    }
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = i + 1; j < cols; j++)
-        {
-            l_Matrix.matrix[i][j] = 0;
+        for (int j = 0; j < cols;j++) {
+            if (i == j)
+                l_Matrix.matrix[i][j] = 1;
+            else                                 // Intialize lMatrix as I matrix
+                l_Matrix.matrix[i][j] = 0;
         }
+           
     }
+    //===========================================
     for (int k = 0; k < rows - 1; k++)
     {
         if (checkPivot(u_Matrix , k))
@@ -138,7 +200,8 @@ pair<Matrix, Matrix> Matrix::LU()
             {
                 swapRows(u_Matrix, k, bestRow);
                 for (int j = 0; j < k; j++)
-                    swap(l_Matrix.matrix[k][j],l_Matrix.matrix[bestRow][j]);
+                     swap(l_Matrix.matrix[k][j], l_Matrix.matrix[bestRow][j]);
+
             }
         }
         if (u_Matrix.matrix[k][k] == 0)
@@ -150,7 +213,7 @@ pair<Matrix, Matrix> Matrix::LU()
             double factor = u_Matrix.matrix[i][k] / u_Matrix.matrix[k][k];
             l_Matrix.matrix[i][k] = factor;
 
-            for (int j = k; j < rows; j++)
+            for (int j = k; j < cols; j++)
             {
                 u_Matrix.matrix[i][j] -= factor * u_Matrix.matrix[k][j];
             }
@@ -162,7 +225,9 @@ pair<Matrix, Matrix> Matrix::LU()
 }
 // ========================================================
 
- 
+
+
+// ==============================================================
 Matrix Matrix::Matrix_power(int power)  
 {
     if (rows != cols)
@@ -197,6 +262,8 @@ Matrix Matrix::Matrix_power(int power)
 
     return result;
 }
+
+
 
 
 // ========================================================

@@ -1,10 +1,14 @@
 ﻿#include <iostream>
 #include "Menu.h"
 #include "utility/colors.h"
+
 using namespace std;
 
 void Menu::Display()  {
-    cout << BOLD_CYAN << "\n=============== Matrix Calculator ===============\n" << RESET;
+
+	cout << BOLD_CYAN << "\n==============================\n";
+	cout << "     Matrix Operations Menu    \n";
+	cout << "=====================================\n" << RESET;
     cout << GREEN << "1. Add Matrices\n" << RESET;
 	cout << GREEN << "2. Subtract Matrices\n" << RESET;
 	cout << GREEN << "3. Scalar Multiplication\n" << RESET;
@@ -14,6 +18,7 @@ void Menu::Display()  {
 	cout << GREEN << "7. Determinant\n" << RESET;
 	cout << GREEN << "8. Matrix Power\n" << RESET;
 	cout << GREEN << "9. LU Factrization\n" << RESET; 
+	cout << GREEN << "10 . REF\n" << RESET; 
 	cout << RED << "0. Exit\n" << RESET;  
     cout << BOLD_BLUE << "================================================\n" << RESET;
     cout << BOLD_WHITE << "Enter your choice: " << RESET;
@@ -23,3 +28,4 @@ int Menu::getOption()
     cin >> choice;
     return choice;
 }
+
