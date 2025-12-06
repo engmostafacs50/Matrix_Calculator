@@ -109,9 +109,10 @@ int Matrix::findBestPivot(const Matrix& maTrix, int k)
     return bestRows;
 }
 //=====================================================
-void Matrix::MoveZeroRow(Matrix& mat)
+pair<Matrix ,int> Matrix::MoveZeroRow(Matrix mat)
 {
     int currentRow = 0;
+    int r = 0;
     vector<vector<double>> newMatrix(rows, vector<double>(cols, 0));
     for (int i = 0; i < rows; i++)
     {
@@ -121,6 +122,7 @@ void Matrix::MoveZeroRow(Matrix& mat)
             if (fabs(mat.matrix[i][j]) > 1e-12)
             {
                ZeroRow = false;
+               
                 break;
             }
         }
@@ -129,9 +131,12 @@ void Matrix::MoveZeroRow(Matrix& mat)
         {
             newMatrix[currentRow] = mat.matrix[i];
             currentRow++;
+            r++;
         }
     }
     mat.matrix = newMatrix;
+    return {mat , r};
+    
 }
 //========================================================
 Matrix Matrix::REF()
@@ -168,8 +173,44 @@ Matrix Matrix::REF()
         }
         currentRow++;
     }
-    MoveZeroRow(mat); 
+    auto result = MoveZeroRow(mat);
+    mat = result.first;
     return mat;
+}
+Matrix Matrix::RREF()
+{
+    Matrix mat = this->REF(); 
+
+    for (int i = rows - 1; i >= 0; i--)
+    {
+        int pivotColumn = 0;
+        for (int j = cols - 1; j >= 0; j--)
+        {
+            if (mat.matrix[i][j] > 0)
+            {
+                pivotColumn = j;
+                break; 
+            }
+        }
+        if (pivotColumn == 0)  // ZEro Row
+            continue; 
+
+        double PivotColValue = mat.matrix[i][pivotColumn];
+
+        for (int c = pivotColumn ; c >= 0; c--)
+        {
+            mat.matrix[i][c] /= PivotColValue;
+        }
+        for (int k = i - 1; k >= 0; k--)
+        {
+            double factor = mat.matrix[k][pivotColumn]; 
+            for (int m = pivotColumn ; m < cols; m++)
+            {
+                mat.matrix[k][m] -= factor * mat.matrix[i][m]; 
+            }
+        }
+    }
+    return mat; 
 }
 //=====================================================================
 pair<Matrix, Matrix> Matrix::LU()
@@ -301,24 +342,9 @@ double Matrix::determinant()
 int Matrix::Rank()
 {
     Matrix mat = this->REF(); 
-    bool CheckZeroRow = false; 
-    int Rank = 0;
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if (mat.matrix[i][j] == 0)
-            {
-                CheckZeroRow = true;
-            }
-            else {
-                CheckZeroRow = false; 
-            }
-        }
-        if (!CheckZeroRow)
-            Rank++;
-    }
-    return Rank; 
+    auto res = MoveZeroRow(mat);
+    int Rank = res.second;
+    return Rank;
 }
 //=====================================================================
 Matrix Matrix::addition(Matrix& matrix2) 

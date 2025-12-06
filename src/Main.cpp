@@ -125,7 +125,12 @@ int main()
                 printMatrix(A.REF().getMAtrix());
                 break; 
             }
-            case 11 :
+            case 11 : 
+            {
+                printMatrix(A.RREF().getMAtrix());
+                break; 
+            }
+            case 12 :
             {
                 cout << "Rank = " << A.Rank(); 
                 break; 

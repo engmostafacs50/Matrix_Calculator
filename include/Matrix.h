@@ -37,17 +37,14 @@ public:
     Matrix transpose()  ;
     Matrix Matrix_power(int power) ;
     Matrix REF(); 
-
+    Matrix RREF();
     pair<Matrix, Matrix> LU();
-     
+    pair<Matrix, int> MoveZeroRow(Matrix mat);
     double trace()  const;    
     double determinant() ;
     int Rank(); 
     void swapRows(Matrix& maTrix, int r1, int r2);
     bool checkPivot(Matrix& maTrix, int k);
     int findBestPivot(const Matrix& maTrix, int k);
-
-    void MoveZeroRow(Matrix& mat);
-
-   
+    
 };
