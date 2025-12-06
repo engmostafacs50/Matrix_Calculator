@@ -11,13 +11,13 @@ using namespace std;
 class Matrix
 {
 private:
-    vector<vector<double>> matrix;
+    
     //vector<vector<double>> matrixB;
     int rows = 0, cols = 0;
     //void inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name);
 
 public:
-    
+    vector<vector<double>> matrix;
     Matrix(int r, int c);
     Matrix(const vector<vector<double>>& d);
     Matrix() : rows(0), cols(0), matrix{} 
@@ -62,4 +62,5 @@ public:
         }
         return I; 
     };
+    Matrix concatenate(const Matrix& other) const; // for linear system
 };

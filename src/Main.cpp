@@ -5,6 +5,7 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "LinearSystem.h"
 using namespace std;
 
 Matrix inputMatrixFromUser(const string& name) {
@@ -49,7 +50,7 @@ void printMatrix(const vector<vector<double>>& mat) {
 
 int main()
 {
-    while (true)   // LOOP start
+    while (true)   
     {
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
@@ -63,25 +64,25 @@ int main()
         }
 
         Matrix A, B;
-        bool needSecond = (op == 1 || op == 2 || op == 4);
-
-        A = inputMatrixFromUser("A");
-        if (needSecond)
-            B = inputMatrixFromUser("B");
 
         try {
             switch (op) 
             {
 
             case 1:
+                A = inputMatrixFromUser("A");
+                B = inputMatrixFromUser("B");
                 printMatrix(A.addition(B).getMAtrix());
                 break;
 
             case 2:
+               A = inputMatrixFromUser("A");
+                B = inputMatrixFromUser("B");
                 printMatrix(A.subtraction(B).getMAtrix());
                 break;
 
             case 3: {
+                A = inputMatrixFromUser("A");
                 double scalar;
                 cout << "Enter scalar: ";
                 cin >> scalar;
@@ -90,22 +91,28 @@ int main()
             }
 
             case 4:
+                A = inputMatrixFromUser("A");
+                B = inputMatrixFromUser("B");
                 printMatrix(A.multiplication(B).getMAtrix());
                 break;
 
             case 5:
+                A = inputMatrixFromUser("A");
                 cout << "Trace = " << A.trace() << "\n";
                 break;
 
             case 6:
+                A = inputMatrixFromUser("A");
                 printMatrix(A.transpose().getMAtrix());
                 break;
 
             case 7:
+                A = inputMatrixFromUser("A");
                 cout << "Determinant = " << A.determinant() << "\n";
                 break;
 
             case 8: {
+                A = inputMatrixFromUser("A");
                 int p;
                 cout << "Enter power: ";
                 cin >> p;
@@ -114,6 +121,7 @@ int main()
             }
 
             case 9: {
+                A = inputMatrixFromUser("A");
                 auto [L, U] = A.LU();
                 cout << BOLD_GREEN << "\nL Matrix:\n" << RESET;
                 printMatrix(L.getMAtrix());
@@ -122,23 +130,42 @@ int main()
                 break;
             }
             case 10: {
+                A = inputMatrixFromUser("A");
                 printMatrix(A.REF().first.getMAtrix());
                 break; 
             }
             case 11 : 
             {
+                A = inputMatrixFromUser("A");
                 printMatrix(A.RREF().first.getMAtrix());
                 break; 
             }
             case 12 :
             {
+                A = inputMatrixFromUser("A");
                 cout << "Rank = " << A.Rank(); 
                 break; 
             }
             case 13: {
+                A = inputMatrixFromUser("A");
                 printMatrix(A.Inverse().getMAtrix()); 
                 break; 
             }
+            case 14: {
+                int eq, var;
+                cout << "Enter number of equations: ";
+                cin >> eq;
+                cout << "Enter number of variables: ";
+                cin >> var;
+
+                Homogenous_System H(eq, var);
+
+                H.input_from_user();
+                H.Solve();
+
+                break;
+            }
+
             default:
                 cout << RED << "Invalid Option\n" << RESET;
             }
@@ -155,5 +182,3 @@ int main()
 
     return 0;
 }
-
-

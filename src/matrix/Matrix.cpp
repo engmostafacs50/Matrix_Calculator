@@ -348,7 +348,7 @@ double Matrix::determinant()
 // =============================================
 int Matrix::Rank()
 {
-    Matrix mat = this->REF().first; 
+    Matrix mat = this->RREF().first; 
     auto res = MoveZeroRow(mat);
     int Rank = res.second;
     return Rank;
@@ -388,4 +388,23 @@ Matrix Matrix::subtraction(Matrix& matrix2)
         }
     }
     return res;
+}
+
+Matrix Matrix::concatenate(const Matrix& other) const
+{
+    if (this->rows != other.rows) {
+        throw runtime_error("Cannot concatenate: row size mismatch.");
+    }
+
+    Matrix result(this->rows, this->cols + other.cols);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result.matrix[i][j] = this->matrix[i][j]; // coffecient of Variables
+        }
+        for (int j = 0; j < other.cols; j++) {
+            result.matrix[i][cols + j] = other.matrix[i][j]; // numbers after (=)
+        }
+    }
+    return result;
 }
