@@ -28,9 +28,7 @@ int Matrix::getCols() const
 {
     return cols;
 }
-
-// ========================================================
-
+// =======================================================
 Matrix Matrix::scalarMultiplication(double scalar) 
 {
     Matrix res(rows , cols); 
@@ -45,7 +43,6 @@ Matrix Matrix::scalarMultiplication(double scalar)
 }
 
 // ========================================================
-
 Matrix Matrix::multiplication(Matrix& matrix2) 
 {
     if (cols != matrix2.getRows())
@@ -69,7 +66,6 @@ Matrix Matrix::multiplication(Matrix& matrix2)
 }
 
 // ========================================================
-
 Matrix Matrix::transpose() 
 {
     Matrix result(cols, rows); 
@@ -81,18 +77,18 @@ Matrix Matrix::transpose()
 }
 
 // ========================================================
-
-
 void Matrix::swapRows(Matrix& maTrix, int r1, int r2)
 {
     swap(maTrix.matrix[r1], maTrix.matrix[r2]);
 }
+
 //===========================================================================
 bool Matrix::checkPivot(Matrix& maTrix, int k)
 {
    return fabs(maTrix.matrix[k][k]) < 1e-12;
  
 }
+
 //======================================================================
 int Matrix::findBestPivot(const Matrix& maTrix, int k)
 {
@@ -108,6 +104,7 @@ int Matrix::findBestPivot(const Matrix& maTrix, int k)
     }
     return bestRows;
 }
+
 //=====================================================
 pair<Matrix ,int> Matrix::MoveZeroRow(Matrix mat)
 {
@@ -151,6 +148,7 @@ Matrix Matrix::Inverse()
     return Inverse_matrix;
 }
 
+//==============================================
 pair<Matrix, Matrix> Matrix::RREF()
 {
     Matrix mat = this->REF().first;
@@ -188,6 +186,7 @@ pair<Matrix, Matrix> Matrix::RREF()
     }
     return { mat, I_Matrix };
 }
+
 //========================================================
 pair<Matrix, Matrix> Matrix::REF()
 {
@@ -232,6 +231,8 @@ pair<Matrix, Matrix> Matrix::REF()
 
     return { mat , I_Matrix };
 }
+
+//=========================================
 pair<Matrix, Matrix> Matrix::LU()
 {
     if (rows != cols)
@@ -273,8 +274,8 @@ pair<Matrix, Matrix> Matrix::LU()
     return { l_Matrix,  u_Matrix };
 
 }
-// ========================================================
 
+// ========================================================
 Matrix Matrix::Matrix_power(int power)  
 {
     if (rows != cols)
@@ -311,7 +312,6 @@ Matrix Matrix::Matrix_power(int power)
 }
 
 // ========================================================
-
 double Matrix::trace() const
 {
     if (rows != cols)
@@ -325,7 +325,6 @@ double Matrix::trace() const
 }
 
 //=============================================================
-
 double Matrix::determinant() 
 {
     if (rows != cols)
@@ -345,6 +344,7 @@ double Matrix::determinant()
     }
     return det;
 }
+
 // =============================================
 int Matrix::Rank()
 {
@@ -353,6 +353,7 @@ int Matrix::Rank()
     int Rank = res.second;
     return Rank;
 }
+
 //=====================================================================
 Matrix Matrix::addition(Matrix& matrix2) 
 {
@@ -372,7 +373,6 @@ Matrix Matrix::addition(Matrix& matrix2)
 }
 
 // ================================================================
-
 Matrix Matrix::subtraction(Matrix& matrix2)
 {
     Matrix res(rows, cols);
