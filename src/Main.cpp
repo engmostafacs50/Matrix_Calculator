@@ -122,17 +122,21 @@ int main()
                 break;
             }
             case 10: {
-                printMatrix(A.REF().getMAtrix());
+                printMatrix(A.REF().first.getMAtrix());
                 break; 
             }
             case 11 : 
             {
-                printMatrix(A.RREF().getMAtrix());
+                printMatrix(A.RREF().first.getMAtrix());
                 break; 
             }
             case 12 :
             {
                 cout << "Rank = " << A.Rank(); 
+                break; 
+            }
+            case 13: {
+                printMatrix(A.Inverse().getMAtrix()); 
                 break; 
             }
             default:

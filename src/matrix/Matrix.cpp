@@ -138,11 +138,63 @@ pair<Matrix ,int> Matrix::MoveZeroRow(Matrix mat)
     return {mat , r};
     
 }
+Matrix Matrix::Inverse()
+{
+    auto result = this->RREF();
+    double det = this->determinant(); 
+    if (det == 0)
+    {
+        throw runtime_error("This matrix is singular and doesn't have an inverse");
+
+    }
+    Matrix Inverse_matrix = result.second;
+    return Inverse_matrix;
+}
+
+pair<Matrix, Matrix> Matrix::RREF()
+{
+    Matrix mat = this->REF().first;
+    Matrix I_Matrix = this->REF().second;
+
+    for (int i = rows - 1; i >= 0; i--)
+    {
+        int pivotColumn = -1;
+        for (int j = 0; j < cols; j++)
+        {
+            if (fabs(mat.matrix[i][j]) > 1e-12)
+            {
+                pivotColumn = j;
+                break;
+            }
+        }
+        if (pivotColumn == -1) 
+            continue;
+
+        double PivotValue = mat.matrix[i][pivotColumn];
+        for (int c = 0; c < cols; c++)
+        {
+            mat.matrix[i][c] /= PivotValue;
+            I_Matrix.matrix[i][c] /= PivotValue;
+        }
+        for (int k = i - 1; k >= 0; k--)
+        {
+            double factor = mat.matrix[k][pivotColumn];
+            for (int m = 0; m < cols; m++)
+            {
+                mat.matrix[k][m] -= factor * mat.matrix[i][m];
+                I_Matrix.matrix[k][m] -= factor * I_Matrix.matrix[i][m];
+            }
+        }
+    }
+    return { mat, I_Matrix };
+}
 //========================================================
-Matrix Matrix::REF()
+pair<Matrix, Matrix> Matrix::REF()
 {
     Matrix mat = *this;
+    Matrix I_Matrix = this->Identity_Matrix();
     int currentRow = 0;
+
     for (int k = 0; k < cols && currentRow < rows; k++)
     {
         if (checkPivot(mat, currentRow))
@@ -151,68 +203,35 @@ Matrix Matrix::REF()
             if (bestRow != currentRow)
             {
                 swapRows(mat, currentRow, bestRow);
+                swapRows(I_Matrix, currentRow, bestRow);
             }
         }
 
         if (fabs(mat.matrix[currentRow][k]) < 1e-12)
             continue;
 
-        double pivot = mat.matrix[currentRow][k];
-        for (int j = k; j < cols; j++)
-        {
-            mat.matrix[currentRow][j] /= pivot;
-        }
-
-        for (int i = currentRow+ 1; i < rows; i++)
+        for (int i = currentRow + 1; i < rows; i++)
         {
             double factor = mat.matrix[i][k] / mat.matrix[currentRow][k];
             for (int j = k; j < cols; j++)
             {
                 mat.matrix[i][j] -= factor * mat.matrix[currentRow][j];
             }
+            for (int j = 0; j < cols; j++)
+            {
+                I_Matrix.matrix[i][j] -= factor * I_Matrix.matrix[currentRow][j];
+            }
         }
         currentRow++;
     }
+
     auto result = MoveZeroRow(mat);
+    auto I = MoveZeroRow(I_Matrix);
+    I_Matrix = I.first;
     mat = result.first;
-    return mat;
+
+    return { mat , I_Matrix };
 }
-Matrix Matrix::RREF()
-{
-    Matrix mat = this->REF(); 
-
-    for (int i = rows - 1; i >= 0; i--)
-    {
-        int pivotColumn = 0;
-        for (int j = cols - 1; j >= 0; j--)
-        {
-            if (mat.matrix[i][j] > 0)
-            {
-                pivotColumn = j;
-                break; 
-            }
-        }
-        if (pivotColumn == 0)  // ZEro Row
-            continue; 
-
-        double PivotColValue = mat.matrix[i][pivotColumn];
-
-        for (int c = pivotColumn ; c >= 0; c--)
-        {
-            mat.matrix[i][c] /= PivotColValue;
-        }
-        for (int k = i - 1; k >= 0; k--)
-        {
-            double factor = mat.matrix[k][pivotColumn]; 
-            for (int m = pivotColumn ; m < cols; m++)
-            {
-                mat.matrix[k][m] -= factor * mat.matrix[i][m]; 
-            }
-        }
-    }
-    return mat; 
-}
-//=====================================================================
 pair<Matrix, Matrix> Matrix::LU()
 {
     if (rows != cols)
@@ -220,20 +239,8 @@ pair<Matrix, Matrix> Matrix::LU()
         throw runtime_error("LU Factorization requires a square matrix.");
     }
     Matrix l_Matrix(rows, cols);
+    l_Matrix = this->Identity_Matrix();
     Matrix u_Matrix = *this;
-
-    //===========================================
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols;j++) {
-            if (i == j)
-                l_Matrix.matrix[i][j] = 1;
-            else                                 // Intialize lMatrix as I matrix
-                l_Matrix.matrix[i][j] = 0;
-        }
-           
-    }
-    //===========================================
     for (int k = 0; k < rows - 1; k++)
     {
         if (checkPivot(u_Matrix , k))
@@ -341,7 +348,7 @@ double Matrix::determinant()
 // =============================================
 int Matrix::Rank()
 {
-    Matrix mat = this->REF(); 
+    Matrix mat = this->REF().first; 
     auto res = MoveZeroRow(mat);
     int Rank = res.second;
     return Rank;

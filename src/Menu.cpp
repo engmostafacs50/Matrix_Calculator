@@ -21,6 +21,7 @@ void Menu::Display()  {
 	cout << GREEN << "10. REF\n" << RESET; 
 	cout << GREEN << "11. RREF\n" << RESET;
 	cout << GREEN << "12. Rank of matrix\n" << RESET;
+	cout << GREEN << "13. Inverse of matrix\n";
 	cout << RED << "0. Exit\n" << RESET;  
     cout << BOLD_BLUE << "================================================\n" << RESET;
     cout << BOLD_WHITE << "Enter your choice: " << RESET;

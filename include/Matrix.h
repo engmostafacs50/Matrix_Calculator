@@ -36,10 +36,11 @@ public:
     Matrix multiplication(Matrix& matrix2)  ;
     Matrix transpose()  ;
     Matrix Matrix_power(int power) ;
-    Matrix REF(); 
-    Matrix RREF();
+    pair <Matrix , Matrix> REF(); 
+    pair<Matrix, Matrix> Matrix::RREF();
     pair<Matrix, Matrix> LU();
     pair<Matrix, int> MoveZeroRow(Matrix mat);
+    Matrix Inverse(); 
     double trace()  const;    
     double determinant() ;
     int Rank(); 
@@ -47,4 +48,18 @@ public:
     bool checkPivot(Matrix& maTrix, int k);
     int findBestPivot(const Matrix& maTrix, int k);
     
+    Matrix Identity_Matrix() {
+        Matrix I = *this; 
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols;j++) 
+            {
+                if (i == j)
+                    I.matrix[i][j] = 1;
+                else                                 
+                    I.matrix[i][j] = 0;
+            }
+        }
+        return I; 
+    };
 };
