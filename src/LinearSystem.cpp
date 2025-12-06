@@ -1,6 +1,6 @@
 #include "LinearSystem.h"
 
-Linear_System::Linear_System(int N_Eq, int N_Var) : N_Variables(N_Var) , N_Equations(N_Eq) ,A(N_Var , N_Eq){}
+Linear_System::Linear_System(int N_Eq, int N_Var) : N_Variables(N_Var) , N_Equations(N_Eq) , A(N_Eq, N_Var) {}
 
 int Linear_System::Get_N_Variables() const
 {
@@ -55,12 +55,12 @@ void Homogenous_System::Solve()
 	{
 		cout << CYAN << "\nThis Linear has Infinity Solutions\n" << RESET;
 	}
-	//for (int i = 0; i < N_Variables; i++)
-	//{
-	//	for (int j = 0; j < N_Equations; j++)
-	//	{
-	//		cout << A.matrix[i][j] << " " ;
-	//	}
-	//	cout << endl; 
-	//}
+	for (int i = 0; i < N_Equations; i++)
+	{
+		for (int j = 0; j < N_Variables; j++)
+		{
+			cout << A.matrix[i][j] << " " ;
+		}
+		cout << endl; 
+	}
 }
