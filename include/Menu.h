@@ -3,8 +3,12 @@
 
 class Menu {
 public:
-    void Display() ;
-    int getOption() ;    
+ 
+    void DisplayMain();
+    void DisplayMatrixMenu();
+    void DisplayLinearMenu();
+    void DisplayVectorMenu();
+    int getOption();
 };
 
-#endif
+#endif 

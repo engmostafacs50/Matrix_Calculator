@@ -41,6 +41,7 @@ public:
     pair<Matrix, Matrix> LU();
     pair<Matrix, int> MoveZeroRow(Matrix mat);
     Matrix Inverse(); 
+    string SYmmetricChecking(); 
     double trace()  const;    
     double determinant() ;
     int Rank(); 

@@ -13,15 +13,7 @@ protected:
 
 public:
     Linear_System(int N_Eq, int N_Var);
-
     virtual ~Linear_System() = default;
-
-    int Get_N_Variables() const;
-    int Get_N_Equations() const;
-
-    int Rank_A();
-    int Rank_A__B();
-
     virtual void input_from_user() = 0;
     virtual void Solve() = 0;
 };

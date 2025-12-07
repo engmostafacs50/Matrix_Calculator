@@ -26,22 +26,17 @@ case one --> (Rank[A] < number of variables) -> Infinity Solution
 */
 
 
-Linear_System::Linear_System(int N_Eq, int N_Var) : N_Variables(N_Var) , N_Equations(N_Eq) , A(N_Eq, N_Var) , B(N_Eq,1) {}
-
-int Linear_System::Get_N_Variables() const
-{
-	return N_Variables;
-}
-int Linear_System::Get_N_Equations() const
-{
-	return N_Equations;
-}
-
+Linear_System::Linear_System(int N_Eq, int N_Var) :
+	N_Variables(N_Var) ,
+	N_Equations(N_Eq) , 
+	A(N_Eq, N_Var) , 
+	B(N_Eq,1) {}
 
 
 Homogenous_System::Homogenous_System(int N_Eq, int N_Var)
-	: Linear_System(N_Eq, N_Var)
-{}
+	: Linear_System(N_Eq, N_Var) {
+}
+
 
 void Homogenous_System::input_from_user()
 { 
@@ -104,6 +99,7 @@ void Non_Homogenous_System::Solve()
 {
 	Matrix A__B = A.concatenate(B); 
 	A__B = A__B.RREF().first; 
+	cout << "A | B : \n\n "; 
 	for (int i = 0; i < A__B.getRows(); i++)
 	{
 		for (int j = 0; j < A__B.getCols(); j++)
@@ -133,6 +129,5 @@ void Non_Homogenous_System::Solve()
  			}
 		}
 	}
-	cout << "Rnak(A|B) " << A__B.Rank() << " Rank(A) " << A.Rank() << endl;
+	cout << "Rnak(A|B) ->" << A__B.Rank() << " Rank(A) ->" << A.Rank() << endl;
 }
-

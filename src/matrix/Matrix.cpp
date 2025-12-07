@@ -1,4 +1,6 @@
-﻿#include "Matrix.h"
+﻿////////////////////////////////////////////////////////////////////
+
+#include "Matrix.h"
 #include <stdexcept>
 
 // ========================================================
@@ -135,6 +137,7 @@ pair<Matrix ,int> Matrix::MoveZeroRow(Matrix mat)
     return {mat , r};
     
 }
+//===================================
 Matrix Matrix::Inverse()
 {
     auto result = this->RREF();
@@ -146,6 +149,27 @@ Matrix Matrix::Inverse()
     }
     Matrix Inverse_matrix = result.second;
     return Inverse_matrix;
+}
+//=====================================
+string Matrix::SYmmetricChecking()
+{
+    Matrix A_t = this->transpose();
+    Matrix mat = *this;
+    if (rows != cols)
+        throw runtime_error("must input square matrix");
+    if (A_t.matrix == mat.matrix)
+        return "Matrix is Symmetric"; 
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            mat.matrix[i][j] *= -1; 
+        }
+    }
+    if(A_t.matrix == mat.matrix)
+        return "Matrix is Skew Symmetric";
+
+    return "No Symmetric and no Skew symmetric"; 
 }
 
 //==============================================
@@ -389,7 +413,7 @@ Matrix Matrix::subtraction(Matrix& matrix2)
     }
     return res;
 }
-
+//=============================================================
 Matrix Matrix::concatenate(const Matrix& other) const
 {
     if (this->rows != other.rows) {
@@ -408,3 +432,4 @@ Matrix Matrix::concatenate(const Matrix& other) const
     }
     return result;
 }
+////////////////////////////////////////////////////////////////////
