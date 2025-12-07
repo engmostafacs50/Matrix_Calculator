@@ -165,6 +165,21 @@ int main()
 
                 break;
             }
+            case 15 : 
+            {
+                int eq, var;
+                cout << "Enter number of equations: ";
+                cin >> eq;
+                cout << "Enter number of variables: ";
+                cin >> var;
+
+                Non_Homogenous_System N_H(eq, var);
+
+                N_H.input_from_user();
+                N_H.Solve();
+
+                break;
+            }
 
             default:
                 cout << RED << "Invalid Option\n" << RESET;

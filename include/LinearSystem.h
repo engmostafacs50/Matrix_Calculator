@@ -4,31 +4,6 @@
 #include "utility/Colors.h"
 using namespace std;
 
-/*
-			Non Homogenous System
-1) Rank[A|B]
-
-2)
-If Rank[A|B] != Rank [A] --> No solution
-
-If Rank[A|B] = Rank[A] -> there are two cases in this case 
-
-case one --> number of variables = Rank[A] -> Unique Solution
-case two --> number of variables > Rank[A] -> Infinity Solution
-*/
-
-// =============================================================
-
-/*
-			  Homogenous System 
-
-1) Rank[A] -> thaere are Two Cases in  this case
-
-case one --> (Rank[A] = number of variables) -> trial solution
-case one --> (Rank[A] < number of variables) -> Infinity Solution
-*/
-
-
 class Linear_System {
 protected:
     int N_Variables;
@@ -59,11 +34,11 @@ public:
     void Solve() override;
 };
 
-//class Non_Homogenous_System : public Linear_System {
-//public:
-//    Non_Homogenous_System(int N_Eq, int N_Var);
-//
-//    void input_from_user() override;
-//    void Solve() override;
-//};
-//
+class Non_Homogenous_System : public Linear_System {
+public:
+    Non_Homogenous_System(int N_Eq, int N_Var);
+
+    void input_from_user() override;
+    void Solve() override;
+};
+
