@@ -550,5 +550,3 @@ double Vector::norm()
 
     return sqrt(Squared_sum);
 }
-
-
