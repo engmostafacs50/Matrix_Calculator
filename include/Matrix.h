@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 #include "utility/Colors.h"
-#include<utility>
-#include<algorithm>
-
+#include <utility>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib> // for clear screen 
 using namespace std;
 class Matrix
 {
@@ -23,12 +24,12 @@ public:
     Matrix() : rows(0), cols(0), matrix{} 
     {
     }
-
+    //=============================================================
 
     const vector<vector<double>>& getMAtrix() const;
     int getRows() const;
     int getCols() const;
-
+    //=============================================================
 
     Matrix addition(Matrix &matrix2) ;
     Matrix subtraction(Matrix& matrix2) ;
@@ -48,7 +49,7 @@ public:
     void swapRows(Matrix& maTrix, int r1, int r2);
     bool checkPivot(Matrix& maTrix, int k);
     int findBestPivot(const Matrix& maTrix, int k);
-    
+    //=============================================================
     Matrix Identity_Matrix() {
         Matrix I = *this; 
         for (int i = 0; i < rows; i++)
@@ -63,5 +64,31 @@ public:
         }
         return I; 
     };
+    
     Matrix concatenate(const Matrix& other) const; // for linear system
+};
+
+
+class Vector {
+
+private :
+    int Dimensions;
+    
+public : 
+    Vector(int dim); 
+    Vector(double x, double y); // 2D vector
+    Vector(double x, double y, double z); // 3D vector
+    Vector(const vector<double>& v); // impotant for input from user 
+    vector<double> values;
+    //=============================================================
+    int getdim() const; 
+
+    Vector add(const Vector& other) const;
+    Vector subtract(const Vector& other)const;
+    Vector scalarMultiply(double scalar) const;
+    double dot(const Vector& other) const;
+    Vector cross(const Vector& other) const;
+    double norm(); 
+
+    //=============================================================
 };

@@ -432,4 +432,123 @@ Matrix Matrix::concatenate(const Matrix& other) const
     }
     return result;
 }
+
 ////////////////////////////////////////////////////////////////////
+
+Vector::Vector(int dim)
+{
+    if (dim <= 3 && dim >= 1)
+    {
+        Dimensions = dim;
+        values = vector<double>(dim, 0.0); 
+    }
+    else
+    {
+        throw invalid_argument("Dimentions should be in intreval [1 , 3]");
+    }
+}
+
+
+Vector::Vector(double x, double y)
+{
+    Dimensions = 2;
+    values = { x , y };
+}
+
+Vector::Vector(double x, double y, double z)
+{
+    Dimensions = 3;
+    values = { x , y , z };
+}
+Vector::Vector(const vector<double>& v)
+{
+    if (v.size() < 1 || v.size() > 3)
+        throw invalid_argument("Vector size must be 1, 2 or 3.");
+
+    Dimensions = v.size();
+    values = v;
+}
+
+int Vector::getdim() const
+{
+    return Dimensions;
+}
+
+
+// operations 
+
+Vector Vector::add(const Vector& other) const
+{
+    Vector Res(this->Dimensions); 
+    if (this->Dimensions != other.Dimensions)
+        throw runtime_error("Dimensions must be equal."); 
+    for (int i = 0; i < this->Dimensions;i++)
+    {
+        Res.values[i] = this->values[i] + other.values[i];
+    }
+    return Res; 
+}
+
+Vector Vector::subtract(const Vector& other) const
+{
+    Vector Res(this->Dimensions);
+    if (this->Dimensions != other.Dimensions)
+        throw runtime_error("Dimensions must be equal.");
+    for (int i = 0; i < this->Dimensions;i++)
+    {
+        Res.values[i] = this->values[i] - other.values[i];
+    }
+    return Res;
+}
+
+Vector Vector::scalarMultiply(double scalar) const
+{
+    Vector Res(this->Dimensions);
+
+    for (int i = 0; i < this->Dimensions; i++)
+        Res.values[i] = scalar * this->values[i] ; 
+
+    return Res;
+}
+
+double Vector::dot(const Vector& other) const
+{
+    double Res = 0;
+    if (this->Dimensions != other.Dimensions)
+        throw runtime_error("Dimensions must be equal.");
+
+    for (int i = 0; i < this->Dimensions;i++)
+    {
+        Res += (this->values[i] + other.values[i]);
+    }
+
+    return Res; 
+}
+
+Vector Vector::cross(const Vector& other) const
+{
+    if (this->Dimensions != other.Dimensions)
+        throw runtime_error("Dimensions must be equal.");
+
+    if (this->Dimensions < 3)
+        throw runtime_error("Dimensions must be equal three.");
+
+   Vector Res(this->Dimensions); 
+
+   Res.values[0] = (this->values[1] * other.values[2]) - (this->values[2] * other.values[1]); 
+   Res.values[1] = ((this->values[0] * other.values[2]) - (this->values[2] * other.values[0])) * -1 ;
+   Res.values[2] = (this->values[0] * other.values[1]) - (this->values[1] * other.values[0]);
+
+   return Res; 
+}
+
+double Vector::norm()
+{
+    double Squared_sum = 0; 
+    for (int i = 0; i < this->Dimensions; i++)
+        Squared_sum += pow(this->values[i], 2); 
+
+    return sqrt(Squared_sum);
+}
+
+

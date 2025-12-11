@@ -46,9 +46,11 @@ void Menu::DisplayLinearMenu() {
 void Menu::DisplayVectorMenu() {
     cout << BOLD_BLUE << "\n--- Vector Operations ---\n" << RESET;
     cout << "1. Vector Addition\n";
-    cout << "2. Dot Product\n";
-    cout << "3. Cross Product\n";
-    cout << "4. Norm / Magnitude\n";
+    cout << "2. Vector Subtraction\n"; 
+    cout << "3. Dot Product\n";
+    cout << "4. Cross Product\n";
+    cout << "5. Scalar Multiplication\n";
+    cout << "6. Norm or Magnitude\n";
     cout << "0. Back to Main Menu\n";
 }
 

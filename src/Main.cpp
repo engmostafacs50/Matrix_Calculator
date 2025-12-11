@@ -8,8 +8,8 @@
 #include "LinearSystem.h"
 #include <optional>
 using namespace std;
-
-Matrix inputMatrixFromUser(const string& name) {
+Matrix inputMatrixFromUser(const string& name)
+{
     int r, c;
     cout << BOLD_YELLOW << "Enter rows for Matrix " << name << ": " << RESET;
     cin >> r;
@@ -28,8 +28,8 @@ Matrix inputMatrixFromUser(const string& name) {
 
     return Matrix(nums);
 }
-
-void printMatrix(const vector<vector<double>>& mat) {
+void printMatrix(const vector<vector<double>>& mat)
+{
     cout << BOLD_BLUE << "\nResult Matrix:\n" << RESET;
     for (const auto& row : mat) {
         for (double val : row) {
@@ -39,7 +39,40 @@ void printMatrix(const vector<vector<double>>& mat) {
     }
     cout << RESET;
 }
+Vector inputVectorFromUser(const string& name)
+{
+    int dim;
+    cout << BOLD_YELLOW << "Enter dimension of Vector " << name << " (1, 2, or 3): " << RESET;
+    cin >> dim;
+    if (dim < 1 || dim > 3)
+        throw runtime_error("Dimension must be 1, 2 or 3.");
 
+    vector<double> vals(dim);
+    cout << GREEN << "Enter elements for Vector " << name << ":\n" << RESET;
+    for (int i = 0; i < dim; i++) {
+        cin >> vals[i];
+    }
+
+    return Vector(vals);
+}
+
+void printVector(const Vector& v)
+{
+    cout << BOLD_BLUE << "Result Vector: " << RESET;
+    cout << "( ";
+    for (int i = 0; i < v.getdim(); i++)
+    {
+        cout << v.values[i] << " ";
+    }
+    cout << ")";
+}
+void clearScreen()
+{
+    cout << "\nPress ENTER to continue..." << RESET;
+    cin.ignore();
+    cin.get();
+    system("CLS");
+}
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
@@ -68,13 +101,15 @@ int main() {
                     case 1: {
                         A = inputMatrixFromUser("A");
                         B = inputMatrixFromUser("B");
-                        printMatrix(A.addition(B).getMAtrix()); 
+                        printMatrix(A.addition(B).getMAtrix());
+                        clearScreen();
                         break;
                     }
                     case 2: {
-                        A = inputMatrixFromUser("A"); 
+                        A = inputMatrixFromUser("A");
                         B = inputMatrixFromUser("B");
                         printMatrix(A.subtraction(B).getMAtrix()); 
+                        clearScreen();
                         break;
                     }
                     
@@ -84,13 +119,16 @@ int main() {
                         double scalar;
                         cout << "Enter scalar: "; cin >> scalar;
                         printMatrix(A.scalarMultiplication(scalar).getMAtrix()); 
+                        clearScreen();
                         break;
                     }
                        
                    
-                    case 4:{ A = inputMatrixFromUser("A");
+                    case 4:{
+                        A = inputMatrixFromUser("A");
                         B = inputMatrixFromUser("B");
                         printMatrix(A.multiplication(B).getMAtrix()); 
+                        clearScreen();
                         break;
                     }
                     case 5: {
@@ -101,49 +139,65 @@ int main() {
                     case 6: {
                         A = inputMatrixFromUser("A");
                         printMatrix(A.transpose().getMAtrix()); 
+                        clearScreen();
                         break;
                     }
                     case 7: {
                         A = inputMatrixFromUser("A");
                         cout << "Determinant = " << A.determinant() << "\n";
+                        clearScreen();
                         break;
                     }
                     case 8: 
                     {
                         A = inputMatrixFromUser("A"); int p;
                         cout << "Enter power: "; cin >> p;
-                        printMatrix(A.Matrix_power(p).getMAtrix()); break;
+                        printMatrix(A.Matrix_power(p).getMAtrix()); 
+                        clearScreen();
+                        break;
                     }
                     case 9:
                     {
                         A = inputMatrixFromUser("A"); auto [L, U] = A.LU();
                         cout << "L Matrix:\n"; printMatrix(L.getMAtrix());
-                        cout << "U Matrix:\n"; printMatrix(U.getMAtrix()); break;
+                        cout << "U Matrix:\n";printMatrix(U.getMAtrix()); 
+                        clearScreen();
+                        break;
                     }
                     case 10: 
                     {
                         A = inputMatrixFromUser("A");
-                        printMatrix(A.REF().first.getMAtrix()); break;
+                        printMatrix(A.REF().first.getMAtrix()); 
+                        clearScreen();
+                        break;
                     }
                     case 11:
                     {
-                        A = inputMatrixFromUser("A");
-                        printMatrix(A.RREF().first.getMAtrix()); break;
+                        A =inputMatrixFromUser("A");
+                        printMatrix(A.RREF().first.getMAtrix()); 
+                        clearScreen();
+                        break;
                     }
                     case 12:
                     {
                         A = inputMatrixFromUser("A");
-                        cout << "Rank = " << A.Rank(); break;
+                        cout << "Rank = " << A.Rank(); 
+                        clearScreen();
+                        break;
                     }
                     case 13: 
                     {
                         A = inputMatrixFromUser("A");
-                        printMatrix(A.Inverse().getMAtrix()); break;
+                        printMatrix(A.Inverse().getMAtrix()); 
+                        clearScreen();
+                        break;
                     }
                     case 14: 
                     {
                         A = inputMatrixFromUser("A");
-                        cout << A.SYmmetricChecking(); break;
+                        cout << A.SYmmetricChecking(); 
+                        clearScreen();
+                        break;
                     }
                     default:
                     {
@@ -167,11 +221,13 @@ int main() {
                         Homogenous_System H(eq, var);
                         H.input_from_user();
                         H.Solve();
+                        clearScreen();
                     }
                     else if (op == 2) {
                         Non_Homogenous_System N_H(eq, var);
                         N_H.input_from_user();
                         N_H.Solve();
+                        clearScreen();
                     }
                     else {
                         cout << RED << "Invalid Option\n" << RESET;
@@ -183,9 +239,63 @@ int main() {
                 while (true) {
                     menu.DisplayVectorMenu();
                     int op = menu.getOption();
-                    if (op == 0) 
-                        break;
-                    cout << YELLOW << "Vector operations not implemented yet.\n" << RESET;
+                    switch (op) 
+                    {
+                        case 0: 
+                        {
+                            break; 
+                        }
+                        case 1:
+                        {
+                            Vector A = inputVectorFromUser("A"); 
+                            Vector B = inputVectorFromUser("B"); 
+                            printVector(A.add(B));
+                            clearScreen();
+                            break;
+                        }
+                        case 2:
+                        {
+                            Vector A = inputVectorFromUser("A");
+                            Vector B = inputVectorFromUser("B");
+                            printVector(A.subtract(B));
+                            clearScreen();
+                            break;
+                        }
+                        case 3:
+                        {
+                            Vector A = inputVectorFromUser("A");
+                            Vector B = inputVectorFromUser("B");
+                            cout << "A . B = " << A.dot(B);
+                            clearScreen();
+                            break;
+                        }
+                        case 4 : 
+                        {
+                            Vector A = inputVectorFromUser("A");
+                            Vector B = inputVectorFromUser("B");
+                            printVector(A.cross(B)); 
+                            clearScreen();
+                            break; 
+                        }
+                        case 5 : 
+                        {
+                            Vector A = inputVectorFromUser("A");
+                            cout << YELLOW << "Enter scalar : " << RESET; 
+                            double scalar; cin >> scalar;
+                            Vector Res = A.scalarMultiply(scalar); 
+                            printVector(Res);
+                            clearScreen();
+                            break; 
+                        }
+                        case 6:
+                        {
+                            Vector A = inputVectorFromUser("A");
+                            cout << "| A | = " << A.norm(); 
+                            clearScreen();
+                            break;
+                        }
+                    }
+                    
                 }
             }
             else {
