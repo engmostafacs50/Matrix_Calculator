@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////
 
 #include "Matrix.h"
-#include <stdexcept>
+
 
 // ========================================================
 Matrix::Matrix(int r, int c) : rows(r), cols(c) {
@@ -519,7 +519,7 @@ double Vector::dot(const Vector& other) const
 
     for (int i = 0; i < this->Dimensions;i++)
     {
-        Res += (this->values[i] + other.values[i]);
+        Res += (this->values[i] * other.values[i]);
     }
 
     return Res; 

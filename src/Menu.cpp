@@ -38,8 +38,8 @@ void Menu::DisplayMatrixMenu() {
 
 void Menu::DisplayLinearMenu() {
     cout << BOLD_BLUE << "\n--- Linear Systems ---\n" << RESET;
-    cout << "1. Solve Linear System \n";
-    cout << "2. Solve Linear System \n";
+    cout << "1. Homogenous System \n";
+    cout << "2. Non Homogenous System \n";
     cout << "0. Back to Main Menu\n";
 }
 

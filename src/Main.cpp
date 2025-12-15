@@ -1,12 +1,8 @@
-﻿#include <iostream>
-#include "Menu.h"
+﻿#include "Menu.h"
 #include "Matrix.h"
 #include "utility/colors.h"
-#define NOMINMAX
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "LinearSystem.h"
-#include <optional>
+#include <memory>
 using namespace std;
 Matrix inputMatrixFromUser(const string& name)
 {
@@ -74,8 +70,6 @@ void clearScreen()
     system("CLS");
 }
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
 
     Menu menu;
 
@@ -216,22 +210,19 @@ int main() {
                     int eq, var;
                     cout << "Enter number of equations: "; cin >> eq;
                     cout << "Enter number of variables: "; cin >> var;
-
+                    unique_ptr<Linear_System>linear_ptr; 
                     if (op == 1) {
-                        Homogenous_System H(eq, var);
-                        H.input_from_user();
-                        H.Solve();
-                        clearScreen();
+                        linear_ptr = make_unique <Homogenous_System>(eq, var);
                     }
                     else if (op == 2) {
-                        Non_Homogenous_System N_H(eq, var);
-                        N_H.input_from_user();
-                        N_H.Solve();
-                        clearScreen();
+                        linear_ptr = make_unique <Non_Homogenous_System>(eq, var);
                     }
                     else {
                         cout << RED << "Invalid Option\n" << RESET;
                     }
+                    linear_ptr->input_from_user();
+                    linear_ptr->Solve();
+                    clearScreen();
                 }
             }
             else if (section == 3) {
@@ -239,12 +230,10 @@ int main() {
                 while (true) {
                     menu.DisplayVectorMenu();
                     int op = menu.getOption();
+                    if (op == 0) break; 
                     switch (op) 
                     {
-                        case 0: 
-                        {
-                            break; 
-                        }
+                        
                         case 1:
                         {
                             Vector A = inputVectorFromUser("A"); 
@@ -294,6 +283,7 @@ int main() {
                             clearScreen();
                             break;
                         }
+
                     }
                     
                 }

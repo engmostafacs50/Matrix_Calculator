@@ -37,11 +37,10 @@ Homogenous_System::Homogenous_System(int N_Eq, int N_Var)
 	: Linear_System(N_Eq, N_Var) {
 }
 
-
 void Homogenous_System::input_from_user()
 { 
 	cout << "\n==============================================\n";
-	cout << "Enter coefficients of A (Homogeneous System) : ";
+	cout << "Enter coefficients of A (Homogeneous System) : " ;
 	cout << "\n==============================================\n";
 	for (int i = 0; i < N_Equations; i++)
 	{
@@ -81,7 +80,7 @@ Non_Homogenous_System::Non_Homogenous_System(int N_Eq, int N_Var)
 void Non_Homogenous_System::input_from_user()
 {
 	cout << "\n==============================================\n";
-	cout << "Enter coefficients of A (Homogeneous System) : ";
+	cout << "Enter coefficients of A (No Homogeneous System) : ";
 	cout << "\n==============================================\n";
 	for (int i = 0; i < N_Equations; i++)
 	{

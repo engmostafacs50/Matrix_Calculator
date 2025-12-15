@@ -8,15 +8,12 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib> // for clear screen 
+#include <stdexcept>
 using namespace std;
 class Matrix
 {
 private:
-    
-    //vector<vector<double>> matrixB;
     int rows = 0, cols = 0;
-    //void inputMatrix(vector<vector<double>>& matrix, int& rows, int& cols, const string& name);
-
 public:
     vector<vector<double>> matrix;
     Matrix(int r, int c);
