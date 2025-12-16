@@ -128,5 +128,5 @@ void Non_Homogenous_System::Solve()
  			}
 		}
 	}
-	cout << "Rnak(A|B) ->" << A__B.Rank() << " Rank(A) ->" << A.Rank() << endl;
+	cout << "Rank(A|B) ->" << A__B.Rank() << " Rank(A) ->" << A.Rank() << endl;
 }
