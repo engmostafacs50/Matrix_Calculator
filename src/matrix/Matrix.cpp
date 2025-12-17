@@ -257,6 +257,7 @@ pair<Matrix, Matrix> Matrix::REF()
 }
 
 //=========================================
+int counter = 0;
 pair<Matrix, Matrix> Matrix::LU()
 {
     if (rows != cols)
@@ -274,6 +275,7 @@ pair<Matrix, Matrix> Matrix::LU()
             if (bestRow != k)
             {
                 swapRows(u_Matrix, k, bestRow);
+                counter++;
                 for (int j = 0; j < k; j++)
                      swap(l_Matrix.matrix[k][j], l_Matrix.matrix[bestRow][j]);
 
@@ -362,6 +364,8 @@ double Matrix::determinant()
 
     auto [L, U] = this->LU();
     double det = 1;
+    if (counter % 2 == 1)
+        det = -1;
     for (int i = 0; i < rows; i++)
     {
         det *= U.matrix[i][i];
@@ -447,7 +451,6 @@ Vector::Vector(int dim)
         throw invalid_argument("Dimentions should be in intreval [1 , 3]");
     }
 }
-
 
 Vector::Vector(double x, double y)
 {
